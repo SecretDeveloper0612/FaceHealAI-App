@@ -391,20 +391,21 @@ const styles = StyleSheet.create({
   logo: {
     width: 80,
     height: 80,
+    borderRadius: 20,
   },
   titleSection: {
     alignItems: 'center',
     marginBottom: 40,
   },
   title: {
-    fontSize: 36,
+    fontSize: 30,
     fontWeight: '800',
     color: '#FFFFFF',
     marginBottom: 8,
     letterSpacing: -0.8,
   },
   subtitle: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '400',
     color: '#8B92A9',
     lineHeight: 22,

@@ -20,6 +20,7 @@ interface SignInScreenProps {
   onForgotPassword?: () => void;
   onGoogleSignIn?: () => void;
   onAppleSignIn?: () => void;
+  onBack?: () => void;
 }
 
 const { width, height } = Dimensions.get('window');
@@ -30,6 +31,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
   onForgotPassword = () => {},
   onGoogleSignIn = () => {},
   onAppleSignIn = () => {},
+  onBack = () => {},
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,6 +41,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
+  const backButtonOpacity = useRef(new RNAnimated.Value(0)).current;
   const backgroundOpacity = useRef(new RNAnimated.Value(0)).current;
   const logoOpacity = useRef(new RNAnimated.Value(0)).current;
   const titleOpacity = useRef(new RNAnimated.Value(0)).current;
@@ -50,6 +53,13 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
   const linksOpacity = useRef(new RNAnimated.Value(0)).current;
 
   useEffect(() => {
+    // Back button animation
+    RNAnimated.timing(backButtonOpacity, {
+      toValue: 1,
+      duration: 600,
+      useNativeDriver: true,
+    }).start();
+
     // Background fade in
     RNAnimated.timing(backgroundOpacity, {
       toValue: 1,
@@ -183,7 +193,25 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
       style={styles.container}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Background Image */}
+         {/* Back Button */}
+         <RNAnimated.View
+           style={[
+             styles.backButtonContainer,
+             {
+               opacity: backButtonOpacity,
+             },
+           ]}
+         >
+           <TouchableOpacity
+             style={styles.backButton}
+             onPress={onBack}
+             activeOpacity={0.7}
+           >
+             <Text style={styles.backButtonText}>←</Text>
+           </TouchableOpacity>
+         </RNAnimated.View>
+
+         {/* Background Image */}
         <RNAnimated.View
           style={[
             styles.backgroundContainer,
@@ -452,6 +480,31 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 40,
   },
+  backButtonContainer: {
+    marginBottom: 20,
+    marginTop: 10,
+    paddingHorizontal: 20,
+  },
+  backButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: 'rgba(37, 99, 235, 0.12)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(37, 99, 235, 0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: 'rgba(37, 99, 235, 0.2)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  backButtonText: {
+    fontSize: 22,
+    color: '#2563EB',
+    fontWeight: '700',
+  },
   logoContainer: {
     alignItems: 'center',
     marginBottom: 30,
@@ -459,9 +512,10 @@ const styles = StyleSheet.create({
   logo: {
     width: 80,
     height: 80,
+    borderRadius: 20,
   },
   title: {
-    fontSize: 36,
+    fontSize: 30,
     fontWeight: '700',
     color: '#FFFFFF',
     marginBottom: 12,
@@ -469,7 +523,7 @@ const styles = StyleSheet.create({
     lineHeight: 44,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '400',
     color: '#999999',
     textAlign: 'center',
