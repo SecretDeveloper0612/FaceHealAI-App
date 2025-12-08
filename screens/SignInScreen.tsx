@@ -41,7 +41,6 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const backButtonOpacity = useRef(new RNAnimated.Value(0)).current;
   const backgroundOpacity = useRef(new RNAnimated.Value(0)).current;
   const logoOpacity = useRef(new RNAnimated.Value(0)).current;
   const titleOpacity = useRef(new RNAnimated.Value(0)).current;
@@ -53,13 +52,6 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
   const linksOpacity = useRef(new RNAnimated.Value(0)).current;
 
   useEffect(() => {
-    // Back button animation
-    RNAnimated.timing(backButtonOpacity, {
-      toValue: 1,
-      duration: 600,
-      useNativeDriver: true,
-    }).start();
-
     // Background fade in
     RNAnimated.timing(backgroundOpacity, {
       toValue: 1,
@@ -193,27 +185,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
       style={styles.container}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
-         {/* Back Button */}
-         <RNAnimated.View
-           style={[
-             styles.backButtonContainer,
-             {
-               opacity: backButtonOpacity,
-             },
-           ]}
-         >
-           <TouchableOpacity
-             style={styles.backButton}
-             onPress={onBack}
-             activeOpacity={0.7}
-           >
-             <Text style={styles.backButtonText}>←</Text>
-           </TouchableOpacity>
-         </RNAnimated.View>
-
-
-
-        {/* Content */}
+         {/* Content */}
         <View style={styles.content}>
           {/* Logo */}
           <RNAnimated.View
@@ -471,35 +443,11 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     backgroundColor: '#000000',
   },
-  backButtonContainer: {
-    marginBottom: 20,
-    marginTop: 20,
-    paddingHorizontal: 20,
-  },
-  backButton: {
-    marginTop: 30,
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    backgroundColor: 'rgba(37, 99, 235, 0.12)',
-    borderWidth: 1.5,
-    borderColor: 'rgba(37, 99, 235, 0.3)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: 'rgba(37, 99, 235, 0.2)',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  backButtonText: {
-    fontSize: 22,
-    color: '#2563EB',
-    fontWeight: '700',
-  },
+
   logoContainer: {
     alignItems: 'center',
     marginBottom: 30,
+    marginTop: 50,
   },
   logo: {
     width: 80,

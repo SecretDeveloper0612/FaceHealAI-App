@@ -33,8 +33,8 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordMismatch, setPasswordMismatch] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(0);
 
-  const backButtonOpacity = useRef(new RNAnimated.Value(0)).current;
   const logoOpacity = useRef(new RNAnimated.Value(0)).current;
   const titleOpacity = useRef(new RNAnimated.Value(0)).current;
   const formOpacity = useRef(new RNAnimated.Value(0)).current;
@@ -42,13 +42,6 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
   const buttonOpacity = useRef(new RNAnimated.Value(0)).current;
 
   useEffect(() => {
-    // Back button animation
-    RNAnimated.timing(backButtonOpacity, {
-      toValue: 1,
-      duration: 600,
-      useNativeDriver: true,
-    }).start();
-
     // Logo animation
     RNAnimated.timing(logoOpacity, {
       toValue: 1,
@@ -91,12 +84,66 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
     }, 1000);
   }, []);
 
+  const calculatePasswordStrength = (pwd: string) => {
+    let strength = 0;
+    if (pwd.length >= 6) strength += 1;
+    if (pwd.length >= 8) strength += 1;
+    if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) strength += 1;
+    if (/\d/.test(pwd)) strength += 1;
+    if (/[!@#$%^&*]/.test(pwd)) strength += 1;
+    return Math.min(strength, 4);
+  };
+
+  const handlePasswordChange = (text: string) => {
+    setPassword(text);
+    setPasswordStrength(calculatePasswordStrength(text));
+    if (confirmPassword && text !== confirmPassword) {
+      setPasswordMismatch(true);
+    } else {
+      setPasswordMismatch(false);
+    }
+  };
+
   const handleConfirmPasswordChange = (text: string) => {
     setConfirmPassword(text);
     if (password && text !== password) {
       setPasswordMismatch(true);
     } else {
       setPasswordMismatch(false);
+    }
+  };
+
+  const getPasswordStrengthColor = () => {
+    switch (passwordStrength) {
+      case 0:
+        return '#666666';
+      case 1:
+        return '#EF4444';
+      case 2:
+        return '#F97316';
+      case 3:
+        return '#EAB308';
+      case 4:
+        return '#10B981';
+      default:
+        return '#666666';
+    }
+  };
+
+  const getPasswordStrengthText = () => {
+    switch (passwordStrength) {
+      case 0:
+        return '';
+      case 1:
+        return 'Weak';
+      case 2:
+        return 'Fair';
+      case 3:
+        return 'Good';
+      case 4:
+        return 'Strong';
+      default:
+        return '';
     }
   };
 
@@ -134,24 +181,6 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Back Button */}
-        <RNAnimated.View
-          style={[
-            styles.backButtonContainer,
-            {
-              opacity: backButtonOpacity,
-            },
-          ]}
-        >
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={onBack}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.backButtonText}>←</Text>
-          </TouchableOpacity>
-        </RNAnimated.View>
-
         {/* Background Gradient */}
         <View style={styles.backgroundGradient} />
 
@@ -203,7 +232,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
               <TextInput
                 style={styles.input}
                 placeholder="Enter Your Name"
-                placeholderTextColor="rgba(0, 0, 0, 0.4)"
+                placeholderTextColor="rgba(255, 255, 255, 1)"
                 value={name}
                 onChangeText={setName}
               />
@@ -218,7 +247,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
               <TextInput
                 style={[styles.input, { paddingLeft: 16 }]}
                 placeholder="Enter Your Email"
-                placeholderTextColor="rgba(0, 0, 0, 0.4)"
+                placeholderTextColor="rgba(255, 255, 255, 1)"
                 keyboardType="email-address"
                 value={email}
                 onChangeText={setEmail}
@@ -228,16 +257,28 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
 
           {/* Password Input */}
           <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Password</Text>
+            <View style={styles.passwordLabelContainer}>
+              <Text style={styles.label}>Password</Text>
+              {password && (
+                <Text
+                  style={[
+                    styles.strengthText,
+                    { color: getPasswordStrengthColor() },
+                  ]}
+                >
+                  {getPasswordStrengthText()}
+                </Text>
+              )}
+            </View>
             <View style={styles.inputBox}>
               <Text style={styles.inputIcon}>🔒</Text>
               <TextInput
                 style={[styles.input, { paddingLeft: 16 }]}
                 placeholder="Enter Password"
-                placeholderTextColor="rgba(0, 0, 0, 0.4)"
+                placeholderTextColor="rgba(255, 255, 255, 0.4)"
                 secureTextEntry={!showPassword}
                 value={password}
-                onChangeText={setPassword}
+                onChangeText={handlePasswordChange}
               />
               <TouchableOpacity
                 onPress={() => setShowPassword(!showPassword)}
@@ -248,6 +289,19 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
                 </Text>
               </TouchableOpacity>
             </View>
+            {password && (
+              <View style={styles.strengthMeter}>
+                <View
+                  style={[
+                    styles.strengthMeterFill,
+                    {
+                      width: `${(passwordStrength / 4) * 100}%`,
+                      backgroundColor: getPasswordStrengthColor(),
+                    },
+                  ]}
+                />
+              </View>
+            )}
           </View>
 
           {/* Confirm Password Input */}
@@ -263,7 +317,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
               <TextInput
                 style={[styles.input, { paddingLeft: 16 }]}
                 placeholder="Confirm Password"
-                placeholderTextColor="rgba(0, 0, 0, 0.4)"
+                placeholderTextColor="rgba(255, 255, 255, 1)"
                 secureTextEntry={!showConfirmPassword}
                 value={confirmPassword}
                 onChangeText={handleConfirmPasswordChange}
@@ -349,37 +403,15 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F1419',
+    backgroundColor: '#000000',
   },
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 20,
     paddingVertical: 20,
+    backgroundColor: '#000000',
   },
-  backButtonContainer: {
-    marginBottom: 20,
-    marginTop: 50,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    backgroundColor: 'rgba(37, 99, 235, 0.12)',
-    borderWidth: 1.5,
-    borderColor: 'rgba(37, 99, 235, 0.3)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: 'rgba(37, 99, 235, 0.2)',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  backButtonText: {
-    fontSize: 22,
-    color: '#2563EB',
-    fontWeight: '700',
-  },
+
   backgroundGradient: {
     position: 'absolute',
     top: 0,
@@ -412,8 +444,8 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     fontWeight: '400',
-    color: '#8B92A9',
-    lineHeight: 22,
+    color: '#999999',
+    lineHeight: 24,
     letterSpacing: 0.2,
   },
   formSection: {
@@ -422,32 +454,42 @@ const styles = StyleSheet.create({
   fieldContainer: {
     marginBottom: 20,
   },
+  passwordLabelContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
   label: {
     fontSize: 14,
     fontWeight: '700',
     color: '#FFFFFF',
-    marginBottom: 10,
+    marginBottom: 0,
     letterSpacing: 0.3,
+  },
+  strengthText: {
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.2,
   },
   inputBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1a1a1a',
     borderRadius: 16,
     paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderWidth: 2,
-    borderColor: '#FFFFFF',
+    paddingVertical: 12,
+    borderWidth: 3,
+    borderColor: '#333333',
   },
   inputBoxError: {
     borderColor: '#EF4444',
-    backgroundColor: 'rgba(239, 68, 68, 0.05)',
   },
   input: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '500',
-    color: '#000000',
+    color: '#FFFFFF',
     padding: 0,
   },
   inputIcon: {
@@ -457,6 +499,17 @@ const styles = StyleSheet.create({
   eyeIcon: {
     fontSize: 18,
     marginLeft: 8,
+  },
+  strengthMeter: {
+    height: 4,
+    backgroundColor: '#333333',
+    borderRadius: 2,
+    marginTop: 8,
+    overflow: 'hidden',
+  },
+  strengthMeterFill: {
+    height: '100%',
+    borderRadius: 2,
   },
   errorText: {
     fontSize: 12,
@@ -471,15 +524,10 @@ const styles = StyleSheet.create({
   signUpButton: {
     backgroundColor: '#2563EB',
     paddingVertical: 16,
-    borderRadius: 16,
+    borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 56,
-    shadowColor: '#2563EB',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 8,
     marginBottom: 20,
   },
   signUpButtonText: {
@@ -502,19 +550,19 @@ const styles = StyleSheet.create({
   dividerText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#8B92A9',
+    color: '#999999',
     letterSpacing: 0.2,
   },
   socialButton: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1a1a1a',
     paddingVertical: 14,
-    borderRadius: 16,
+    borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: '#333333',
   },
   socialIcon: {
     fontSize: 18,
@@ -526,13 +574,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   googleLogoContainer: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: 12,
     shadowColor: '#4285F4',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
@@ -540,14 +588,14 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   googleLogoG: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: 'bold',
     color: '#4285F4',
   },
   socialButtonText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '600',
-    color: '#000000',
+    color: '#FFFFFF',
     letterSpacing: 0.2,
   },
   signInContainer: {
@@ -557,15 +605,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   signInText: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '400',
-    color: '#8B92A9',
+    color: '#999999',
     letterSpacing: 0.2,
   },
   signInLink: {
-    fontSize: 13,
-    fontWeight: '700',
+    fontSize: 14,
+    fontWeight: '600',
     color: '#2563EB',
     letterSpacing: 0.2,
+    textDecorationLine: 'underline',
   },
 });
