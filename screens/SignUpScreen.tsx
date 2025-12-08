@@ -314,7 +314,9 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
             onPress={handleGoogleSignUp}
             activeOpacity={0.8}
           >
-            <Text style={styles.socialIcon}>🔍</Text>
+            <View style={styles.googleLogoContainer}>
+              <Text style={styles.googleLogoG}>G</Text>
+            </View>
             <Text style={styles.socialButtonText}>Sign in with Google</Text>
           </TouchableOpacity>
 
@@ -324,7 +326,10 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
             onPress={handleAppleSignUp}
             activeOpacity={0.8}
           >
-            <Text style={styles.socialIcon}>🍎</Text>
+            <Image
+              source={require('../assets/Images/apple-logo.png')}
+              style={styles.socialButtonIcon}
+            />
             <Text style={styles.socialButtonText}>Sign in with Apple</Text>
           </TouchableOpacity>
 
@@ -353,7 +358,7 @@ const styles = StyleSheet.create({
   },
   backButtonContainer: {
     marginBottom: 20,
-    marginTop: 10,
+    marginTop: 50,
   },
   backButton: {
     width: 44,
@@ -514,6 +519,30 @@ const styles = StyleSheet.create({
   socialIcon: {
     fontSize: 18,
     marginRight: 10,
+  },
+  socialButtonIcon: {
+    width: 18,
+    height: 18,
+    marginRight: 10,
+  },
+  googleLogoContainer: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+    shadowColor: '#4285F4',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  googleLogoG: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#4285F4',
   },
   socialButtonText: {
     fontSize: 15,

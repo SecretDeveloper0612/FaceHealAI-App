@@ -211,22 +211,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
            </TouchableOpacity>
          </RNAnimated.View>
 
-         {/* Background Image */}
-        <RNAnimated.View
-          style={[
-            styles.backgroundContainer,
-            { opacity: backgroundOpacity },
-          ]}
-        >
-          <ImageBackground
-            source={{
-              uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&h=900&fit=crop',
-            }}
-            style={styles.background}
-          >
-            <View style={styles.overlay} />
-          </ImageBackground>
-        </RNAnimated.View>
+
 
         {/* Content */}
         <View style={styles.content}>
@@ -401,7 +386,9 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
               onPress={onGoogleSignIn}
               activeOpacity={0.8}
             >
-              <Text style={styles.googleIcon}>🔵</Text>
+              <View style={styles.googleLogoContainer}>
+                <Text style={styles.googleLogoG}>G</Text>
+              </View>
               <Text style={styles.socialButtonText}>Sign in with Google</Text>
             </TouchableOpacity>
 
@@ -411,7 +398,10 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
               onPress={onAppleSignIn}
               activeOpacity={0.8}
             >
-              <Text style={styles.appleIcon}>🍎</Text>
+              <Image
+                source={require('../assets/Images/apple-logo.png')}
+                style={styles.socialButtonIcon}
+              />
               <Text style={styles.socialButtonText}>Sign in with Apple</Text>
             </TouchableOpacity>
           </RNAnimated.View>
@@ -477,15 +467,17 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 20,
-    paddingTop: 60,
+    paddingTop: 0,
     paddingBottom: 40,
+    backgroundColor: '#000000',
   },
   backButtonContainer: {
     marginBottom: 20,
-    marginTop: 10,
+    marginTop: 20,
     paddingHorizontal: 20,
   },
   backButton: {
+    marginTop: 30,
     width: 44,
     height: 44,
     borderRadius: 12,
@@ -633,13 +625,29 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333333',
   },
-  googleIcon: {
-    fontSize: 20,
+  socialButtonIcon: {
+    width: 20,
+    height: 20,
     marginRight: 12,
   },
-  appleIcon: {
-    fontSize: 20,
+  googleLogoContainer: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 12,
+    shadowColor: '#4285F4',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  googleLogoG: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#4285F4',
   },
   socialButtonText: {
     fontSize: 16,
@@ -657,7 +665,7 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 28,
     borderWidth: 2,
-    borderColor: '#555',
+    borderColor: '#333333',
     alignItems: 'center',
     justifyContent: 'center',
   },
