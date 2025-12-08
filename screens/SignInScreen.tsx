@@ -552,12 +552,12 @@ const styles = StyleSheet.create({
   inputBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1a1a1a',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderWidth: 3,
-    borderColor: '#FFFFFF',
+    borderColor: '#333333',
   },
   inputBoxFocused: {
     borderColor: '#2563EB',
@@ -575,7 +575,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#000000',
+    color: '#FFFFFF',
     paddingVertical: 8,
   },
   eyeIcon: {
@@ -624,12 +624,14 @@ const styles = StyleSheet.create({
   },
   socialButton: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1a1a1a',
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#333333',
   },
   googleIcon: {
     fontSize: 20,
@@ -642,7 +644,7 @@ const styles = StyleSheet.create({
   socialButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#000000',
+    color: '#FFFFFF',
   },
   socialIconsContainer: {
     flexDirection: 'row',

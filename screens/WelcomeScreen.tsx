@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
+    marginTop: 40,
     marginBottom: 40,
   },
   logo: {
