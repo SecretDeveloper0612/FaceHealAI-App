@@ -1,20 +1,48 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { useState, useEffect } from 'react';
+import { useFonts } from 'expo-font';
+import { Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
+import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
+import * as SplashScreenModule from 'expo-splash-screen';
 import { SplashScreen, WelcomeScreen, ProfileSetupScreen, ProfileSetupAgeScreen, ProfileSetupWeightScreen, ProfileSetupAllergyScreen, SignInScreen, SignUpScreen } from './screens';
+
+SplashScreenModule.preventAutoHideAsync();
 
 type AppState = 'splash' | 'welcome' | 'profileSetup' | 'profileAge' | 'profileWeight' | 'profileAllergy' | 'signIn' | 'signUp' | 'main';
 
 export default function App() {
   const [appState, setAppState] = useState<AppState>('splash');
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+    Poppins_700Bold,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+  });
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setAppState('welcome');
-    }, 3000);
+    if (fontsLoaded) {
+      SplashScreenModule.hideAsync();
+    }
+  }, [fontsLoaded]);
 
-    return () => clearTimeout(timer);
-  }, []);
+  useEffect(() => {
+    if (fontsLoaded) {
+      const timer = setTimeout(() => {
+        setAppState('welcome');
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   const handleGetStarted = () => {
     // Navigate to profile setup screen
@@ -109,7 +137,7 @@ export default function App() {
     return (
       <View style={styles.container}>
         <SplashScreen onFinish={() => setAppState('welcome')} />
-        <StatusBar barStyle="light-content" />
+        <StatusBar style="light" />
       </View>
     );
   }
@@ -121,7 +149,7 @@ export default function App() {
           onGetStarted={handleGetStarted}
           onSignIn={handleWelcomeSignIn}
         />
-        <StatusBar barStyle="light-content" />
+        <StatusBar style="light" />
       </View>
     );
   }
@@ -133,7 +161,7 @@ export default function App() {
           onBack={handleProfileSetupBack}
           onGetStarted={handleProfileSetupComplete}
         />
-        <StatusBar barStyle="light-content" />
+        <StatusBar style="light" />
       </View>
     );
   }
@@ -145,7 +173,7 @@ export default function App() {
           onBack={handleProfileAgeBack}
           onGetStarted={handleProfileAgeComplete}
         />
-        <StatusBar barStyle="light-content" />
+        <StatusBar style="light" />
       </View>
     );
   }
@@ -157,7 +185,7 @@ export default function App() {
           onBack={handleProfileWeightBack}
           onGetStarted={handleProfileWeightComplete}
         />
-        <StatusBar barStyle="light-content" />
+        <StatusBar style="light" />
       </View>
     );
   }
@@ -169,7 +197,7 @@ export default function App() {
           onBack={handleProfileAllergyBack}
           onGetStarted={handleProfileAllergyComplete}
         />
-        <StatusBar barStyle="light-content" />
+        <StatusBar style="light" />
       </View>
     );
   }
@@ -184,7 +212,7 @@ export default function App() {
           onGoogleSignIn={handleSignInGoogleClick}
           onAppleSignIn={handleSignInAppleClick}
         />
-        <StatusBar barStyle="light-content" />
+        <StatusBar style="light" />
       </View>
     );
   }
@@ -196,7 +224,7 @@ export default function App() {
           onSignUpSuccess={handleSignUpSuccess}
           onSignIn={handleSignUpBack}
         />
-        <StatusBar barStyle="light-content" />
+        <StatusBar style="light" />
       </View>
     );
   }
@@ -206,7 +234,7 @@ export default function App() {
       <View style={styles.mainContainer}>
         {/* Your main app content will go here */}
       </View>
-      <StatusBar barStyle="light-content" />
+      <StatusBar style="light" />
     </View>
   );
 }

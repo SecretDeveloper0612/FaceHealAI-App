@@ -12,7 +12,10 @@ import {
   Platform,
   ScrollView,
   Image,
+  Modal,
 } from 'react-native';
+import { ForgotPasswordScreen } from './ForgotPasswordScreen';
+import { FONTS } from '../theme/fonts';
 
 interface SignInScreenProps {
   onSignIn?: (email: string, password: string) => void;
@@ -26,12 +29,12 @@ interface SignInScreenProps {
 const { width, height } = Dimensions.get('window');
 
 export const SignInScreen: React.FC<SignInScreenProps> = ({
-  onSignIn = () => {},
-  onSignUp = () => {},
-  onForgotPassword = () => {},
-  onGoogleSignIn = () => {},
-  onAppleSignIn = () => {},
-  onBack = () => {},
+  onSignIn = () => { },
+  onSignUp = () => { },
+  onForgotPassword = () => { },
+  onGoogleSignIn = () => { },
+  onAppleSignIn = () => { },
+  onBack = () => { },
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,6 +43,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const backgroundOpacity = useRef(new RNAnimated.Value(0)).current;
   const logoOpacity = useRef(new RNAnimated.Value(0)).current;
@@ -185,7 +189,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
       style={styles.container}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
-         {/* Content */}
+        {/* Content */}
         <View style={styles.content}>
           {/* Logo */}
           <RNAnimated.View
@@ -197,7 +201,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
             ]}
           >
             <Image
-              source={require('../assets/Images/app-logo.png')}
+              source={require('../assets/Images/app-logo-image.png')}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -250,7 +254,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
                 isEmailValid && styles.inputBoxSuccess,
               ]}
             >
-              <Text style={styles.fieldIcon}>✉️</Text>
+              <Text style={styles.fieldIcon}>📧</Text>
               <TextInput
                 style={styles.input}
                 placeholder="elementary221b@gmail.com"
@@ -293,7 +297,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
                 isPasswordValid && styles.inputBoxSuccess,
               ]}
             >
-              <Text style={styles.fieldIcon}>🔒</Text>
+              <Text style={styles.fieldIcon}>🔐</Text>
               <TextInput
                 style={styles.input}
                 placeholder="••••••••••••"
@@ -309,7 +313,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
                 style={styles.eyeIcon}
               >
                 <Text style={styles.eyeText}>
-                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                  {showPassword ? '👁' : '🙈'}
                 </Text>
               </TouchableOpacity>
               {isPasswordValid && (
@@ -358,9 +362,10 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
               onPress={onGoogleSignIn}
               activeOpacity={0.8}
             >
-              <View style={styles.googleLogoContainer}>
-                <Text style={styles.googleLogoG}>G</Text>
-              </View>
+              <Image
+                source={require('../assets/Images/google-icon.png')}
+                style={styles.socialButtonIcon}
+              />
               <Text style={styles.socialButtonText}>Sign in with Google</Text>
             </TouchableOpacity>
 
@@ -371,7 +376,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
               activeOpacity={0.8}
             >
               <Image
-                source={require('../assets/Images/apple-logo.png')}
+                source={require('../assets/Images/apple-icon.png')}
                 style={styles.socialButtonIcon}
               />
               <Text style={styles.socialButtonText}>Sign in with Apple</Text>
@@ -379,17 +384,24 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
           </RNAnimated.View>
 
           {/* Social Media Icons */}
-          <View style={styles.socialIconsContainer}>
-            <TouchableOpacity style={styles.socialIcon}>
+          <RNAnimated.View
+            style={[
+              styles.socialIconsContainer,
+              {
+                opacity: linksOpacity,
+              },
+            ]}
+          >
+            <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>
               <Text style={styles.socialIconText}>📷</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.socialIcon}>
+            <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>
               <Text style={styles.socialIconText}>f</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.socialIcon}>
-              <Text style={styles.socialIconText}>in</Text>
+            <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>
+              <Text style={styles.socialIconText}>▶</Text>
             </TouchableOpacity>
-          </View>
+          </RNAnimated.View>
 
           {/* Links */}
           <RNAnimated.View
@@ -407,12 +419,27 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity onPress={onForgotPassword}>
+            <TouchableOpacity onPress={() => setShowForgotPassword(true)}>
               <Text style={styles.forgotPasswordLink}>Forgot Password</Text>
             </TouchableOpacity>
           </RNAnimated.View>
         </View>
       </ScrollView>
+
+      {/* Forgot Password Modal */}
+      <Modal
+        visible={showForgotPassword}
+        animationType="slide"
+        onRequestClose={() => setShowForgotPassword(false)}
+      >
+        <ForgotPasswordScreen
+          onResetPassword={(method) => {
+            onForgotPassword();
+            setShowForgotPassword(false);
+          }}
+          onBack={() => setShowForgotPassword(false)}
+        />
+      </Modal>
     </KeyboardAvoidingView>
   );
 };

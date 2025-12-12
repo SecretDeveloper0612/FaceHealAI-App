@@ -8,6 +8,7 @@ import {
   Dimensions,
   PanResponder,
 } from 'react-native';
+import { FONTS } from '../theme/fonts';
 
 interface ProfileSetupWeightScreenProps {
   onBack?: () => void;
@@ -22,8 +23,8 @@ const SLIDER_WIDTH = width - 40;
 const TICK_MARKS = 171; // 30 to 200 inclusive
 
 export const ProfileSetupWeightScreen: React.FC<ProfileSetupWeightScreenProps> = ({
-  onBack = () => {},
-  onGetStarted = () => {},
+  onBack = () => { },
+  onGetStarted = () => { },
 }) => {
   const [selectedWeight, setSelectedWeight] = useState(70);
   const [unit, setUnit] = useState<'kg' | 'lbs'>('kg');
@@ -46,12 +47,12 @@ export const ProfileSetupWeightScreen: React.FC<ProfileSetupWeightScreenProps> =
         // Get the current position from the starting point
         const positionX = gestureState.moveX - 40; // Account for padding
         const clampedX = Math.max(0, Math.min(positionX, SLIDER_WIDTH));
-        
+
         // Calculate weight based on position
         const newWeight = Math.round(
           MIN_WEIGHT + (clampedX / SLIDER_WIDTH) * (MAX_WEIGHT - MIN_WEIGHT)
         );
-        
+
         setSelectedWeight(newWeight);
         sliderPosition.setValue(clampedX);
       },
@@ -62,7 +63,7 @@ export const ProfileSetupWeightScreen: React.FC<ProfileSetupWeightScreenProps> =
         const newWeight = Math.round(
           MIN_WEIGHT + (clampedX / SLIDER_WIDTH) * (MAX_WEIGHT - MIN_WEIGHT)
         );
-        
+
         // Animate to final position
         const finalPosition = ((newWeight - MIN_WEIGHT) / (MAX_WEIGHT - MIN_WEIGHT)) * SLIDER_WIDTH;
         RNAnimated.timing(sliderPosition, {
@@ -70,7 +71,7 @@ export const ProfileSetupWeightScreen: React.FC<ProfileSetupWeightScreenProps> =
           duration: 200,
           useNativeDriver: true,
         }).start();
-        
+
         setSelectedWeight(newWeight);
       },
     })
@@ -339,6 +340,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   backButtonContainer: {
+    marginTop: 20,
     marginBottom: 30,
   },
   backButton: {
@@ -359,14 +361,14 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontSize: 22,
     color: '#2563EB',
-    fontWeight: '700',
+    fontFamily: FONTS.POPPINS_BOLD,
   },
   headerSection: {
     marginBottom: 30,
   },
   title: {
     fontSize: 30,
-    fontWeight: '800',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     marginBottom: 12,
     lineHeight: 46,
@@ -374,7 +376,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14,
-    fontWeight: '400',
+    fontFamily: FONTS.POPPINS_REGULAR,
     color: '#8B92A9',
     lineHeight: 20,
     letterSpacing: 0.3,
@@ -400,7 +402,7 @@ const styles = StyleSheet.create({
   },
   unitText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: FONTS.POPPINS_SEMIBOLD,
     color: '#2563EB',
   },
   unitTextActive: {
@@ -412,13 +414,13 @@ const styles = StyleSheet.create({
   },
   weightValue: {
     fontSize: 64,
-    fontWeight: '700',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     letterSpacing: -2,
   },
   weightUnit: {
     fontSize: 20,
-    fontWeight: '600',
+    fontFamily: FONTS.POPPINS_SEMIBOLD,
     color: '#8B92A9',
     marginTop: -8,
   },
@@ -487,15 +489,15 @@ const styles = StyleSheet.create({
   getStartedButton: {
     backgroundColor: '#2563EB',
     paddingVertical: 16,
-    borderRadius: 50,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 56,
   },
   getStartedText: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     letterSpacing: 0.4,
   },
-  });
+});

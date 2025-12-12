@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { FONTS } from '../theme/fonts';
 import {
   StyleSheet,
   View,
@@ -22,9 +23,9 @@ interface SignUpScreenProps {
 const { width, height } = Dimensions.get('window');
 
 export const SignUpScreen: React.FC<SignUpScreenProps> = ({
-  onSignUpSuccess = () => {},
-  onSignIn = () => {},
-  onBack = () => {},
+  onSignUpSuccess = () => { },
+  onSignIn = () => { },
+  onBack = () => { },
 }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -194,7 +195,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
           ]}
         >
           <Image
-            source={require('../assets/Images/app-logo.png')}
+            source={require('../assets/Images/app-logo-image.png')}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -368,9 +369,10 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
             onPress={handleGoogleSignUp}
             activeOpacity={0.8}
           >
-            <View style={styles.googleLogoContainer}>
-              <Text style={styles.googleLogoG}>G</Text>
-            </View>
+            <Image
+              source={require('../assets/Images/google-icon.png')}
+              style={styles.socialButtonIcon}
+            />
             <Text style={styles.socialButtonText}>Sign in with Google</Text>
           </TouchableOpacity>
 
@@ -381,7 +383,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({
             activeOpacity={0.8}
           >
             <Image
-              source={require('../assets/Images/apple-logo.png')}
+              source={require('../assets/Images/apple-icon.png')}
               style={styles.socialButtonIcon}
             />
             <Text style={styles.socialButtonText}>Sign in with Apple</Text>
@@ -436,14 +438,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: '800',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     marginBottom: 8,
     letterSpacing: -0.8,
   },
   subtitle: {
     fontSize: 14,
-    fontWeight: '400',
+    fontFamily: FONTS.POPPINS_REGULAR,
     color: '#999999',
     lineHeight: 24,
     letterSpacing: 0.2,
@@ -462,14 +464,14 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: '700',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     marginBottom: 0,
     letterSpacing: 0.3,
   },
   strengthText: {
     fontSize: 12,
-    fontWeight: '600',
+    fontFamily: FONTS.POPPINS_SEMIBOLD,
     letterSpacing: 0.2,
   },
   inputBox: {
@@ -488,7 +490,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    fontWeight: '500',
+    fontFamily: FONTS.POPPINS_MEDIUM,
     color: '#FFFFFF',
     padding: 0,
   },
@@ -513,7 +515,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 12,
-    fontWeight: '600',
+    fontFamily: FONTS.POPPINS_SEMIBOLD,
     color: '#EF4444',
     marginTop: 8,
     letterSpacing: 0.2,
@@ -532,7 +534,7 @@ const styles = StyleSheet.create({
   },
   signUpButtonText: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     letterSpacing: 0.4,
   },
@@ -549,7 +551,7 @@ const styles = StyleSheet.create({
   },
   dividerText: {
     fontSize: 13,
-    fontWeight: '500',
+    fontFamily: FONTS.POPPINS_MEDIUM,
     color: '#999999',
     letterSpacing: 0.2,
   },
@@ -589,12 +591,12 @@ const styles = StyleSheet.create({
   },
   googleLogoG: {
     fontSize: 12,
-    fontWeight: 'bold',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#4285F4',
   },
   socialButtonText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: FONTS.POPPINS_SEMIBOLD,
     color: '#FFFFFF',
     letterSpacing: 0.2,
   },
@@ -606,13 +608,13 @@ const styles = StyleSheet.create({
   },
   signInText: {
     fontSize: 14,
-    fontWeight: '400',
+    fontFamily: FONTS.POPPINS_REGULAR,
     color: '#999999',
     letterSpacing: 0.2,
   },
   signInLink: {
     fontSize: 14,
-    fontWeight: '600',
+    fontFamily: FONTS.POPPINS_SEMIBOLD,
     color: '#2563EB',
     letterSpacing: 0.2,
     textDecorationLine: 'underline',

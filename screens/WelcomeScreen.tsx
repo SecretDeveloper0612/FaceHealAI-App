@@ -9,6 +9,7 @@ import {
   Dimensions,
   Image,
 } from 'react-native';
+import { FONTS } from '../theme/fonts';
 
 interface WelcomeScreenProps {
   onGetStarted?: () => void;
@@ -18,8 +19,8 @@ interface WelcomeScreenProps {
 const { width, height } = Dimensions.get('window');
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
-  onGetStarted = () => {},
-  onSignIn = () => {},
+  onGetStarted = () => { },
+  onSignIn = () => { },
 }) => {
   const backgroundOpacity = useRef(new RNAnimated.Value(0)).current;
   const logoScale = useRef(new RNAnimated.Value(0.8)).current;
@@ -118,6 +119,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
       {/* Content */}
       <View style={styles.content}>
+        {/* Spacer to push content down */}
+        <View style={{ flex: 20 }} />
+
         {/* Logo */}
         <RNAnimated.View
           style={[
@@ -129,7 +133,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           ]}
         >
           <Image
-            source={require('../assets/Images/app-logo.png')}
+            source={require('../assets/Images/app-logo-image.png')}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -160,7 +164,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         </RNAnimated.Text>
 
         {/* Spacer */}
-        <View style={{ flex: 1 }} />
+        <View style={{ flex: 0.8 }} />
 
         {/* Get Started Button */}
         <RNAnimated.View
@@ -230,7 +234,8 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 20,
+    marginTop: -100,
   },
   logo: {
     width: 90,
@@ -238,17 +243,17 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   title: {
-    fontSize: 28,
-    fontWeight: '700',
+    fontSize: 26,
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     textAlign: 'center',
     marginBottom: 0,
-    marginTop: 350,
+    marginTop: 0,
     lineHeight: 44,
   },
   subtitle: {
     fontSize: 16,
-    fontWeight: '400',
+    fontFamily: FONTS.POPPINS_REGULAR,
     color: '#E0E0E0',
     textAlign: 'center',
     lineHeight: 24,
@@ -266,7 +271,7 @@ const styles = StyleSheet.create({
   },
   getStartedText: {
     fontSize: 18,
-    fontWeight: '600',
+    fontFamily: FONTS.POPPINS_SEMIBOLD,
     color: '#FFFFFF',
     letterSpacing: 0.3,
   },
@@ -279,12 +284,12 @@ const styles = StyleSheet.create({
   signInLabel: {
     fontSize: 14,
     color: '#f8f5f5ff',
-    fontWeight: '400',
+    fontFamily: FONTS.POPPINS_REGULAR,
   },
   signInLink: {
     fontSize: 14,
     color: '#2563EB',
-    fontWeight: '600',
+    fontFamily: FONTS.POPPINS_SEMIBOLD,
     textDecorationLine: 'underline',
   },
 });

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
+import { FONTS } from '../theme/fonts';
 
 interface ProfileSetupScreenProps {
   onBack?: () => void;
@@ -18,8 +19,8 @@ const { width, height } = Dimensions.get('window');
 type Gender = 'Male' | 'Female' | 'Other' | null;
 
 export const ProfileSetupScreen: React.FC<ProfileSetupScreenProps> = ({
-  onBack = () => {},
-  onGetStarted = () => {},
+  onBack = () => { },
+  onGetStarted = () => { },
 }) => {
   const [selectedGender, setSelectedGender] = useState<Gender>(null);
 
@@ -312,6 +313,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   backButtonContainer: {
+    marginTop: 20,
     marginBottom: 30,
   },
   backButton: {
@@ -332,14 +334,14 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontSize: 22,
     color: '#2563EB',
-    fontWeight: '700',
+    fontFamily: FONTS.POPPINS_BOLD,
   },
   headerSection: {
     marginBottom: 50,
   },
   title: {
     fontSize: 30,
-    fontWeight: '800',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     marginBottom: 12,
     lineHeight: 46,
@@ -347,7 +349,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14,
-    fontWeight: '400',
+    fontFamily: FONTS.POPPINS_REGULAR,
     color: '#8B92A9',
     lineHeight: 20,
     letterSpacing: 0.3,
@@ -384,12 +386,12 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: FONTS.POPPINS_SEMIBOLD,
     color: '#FFFFFF',
   },
   optionTextSelected: {
     color: '#2563EB',
-    fontWeight: '700',
+    fontFamily: FONTS.POPPINS_BOLD,
   },
   buttonWrapper: {
     marginTop: 40,
@@ -413,7 +415,7 @@ const styles = StyleSheet.create({
   },
   getStartedText: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     letterSpacing: 0.4,
   },

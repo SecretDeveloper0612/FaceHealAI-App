@@ -10,6 +10,7 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
 } from 'react-native';
+import { FONTS } from '../theme/fonts';
 
 interface ProfileSetupAgeScreenProps {
   onBack?: () => void;
@@ -19,18 +20,8 @@ interface ProfileSetupAgeScreenProps {
 const { width, height } = Dimensions.get('window');
 
 const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ];
 
 const generateDays = () => Array.from({ length: 31 }, (_, i) => i + 1);
@@ -39,16 +30,16 @@ const generateYears = () => {
   return Array.from({ length: 100 }, (_, i) => currentYear - i);
 };
 
-const ITEM_HEIGHT = 45;
+const ITEM_HEIGHT = 50;
 const VISIBLE_ITEMS = 5;
 
 export const ProfileSetupAgeScreen: React.FC<ProfileSetupAgeScreenProps> = ({
-  onBack = () => {},
-  onGetStarted = () => {},
+  onBack = () => { },
+  onGetStarted = () => { },
 }) => {
   const [selectedMonth, setSelectedMonth] = useState(8); // September
   const [selectedDay, setSelectedDay] = useState(17);
-  const [selectedYear, setSelectedYear] = useState(2018);
+  const [selectedYear, setSelectedYear] = useState(2006);
 
   const backButtonOpacity = useRef(new RNAnimated.Value(0)).current;
   const titleOpacity = useRef(new RNAnimated.Value(0)).current;
@@ -63,14 +54,12 @@ export const ProfileSetupAgeScreen: React.FC<ProfileSetupAgeScreenProps> = ({
   const yearScrollRef = useRef<ScrollView | null>(null);
 
   useEffect(() => {
-    // Back button animation
     RNAnimated.timing(backButtonOpacity, {
       toValue: 1,
       duration: 600,
       useNativeDriver: true,
     }).start();
 
-    // Title animation
     setTimeout(() => {
       RNAnimated.timing(titleOpacity, {
         toValue: 1,
@@ -79,7 +68,6 @@ export const ProfileSetupAgeScreen: React.FC<ProfileSetupAgeScreenProps> = ({
       }).start();
     }, 200);
 
-    // Subtitle animation
     setTimeout(() => {
       RNAnimated.timing(subtitleOpacity, {
         toValue: 1,
@@ -88,7 +76,6 @@ export const ProfileSetupAgeScreen: React.FC<ProfileSetupAgeScreenProps> = ({
       }).start();
     }, 400);
 
-    // Picker animation
     setTimeout(() => {
       RNAnimated.parallel([
         RNAnimated.timing(pickerOpacity, {
@@ -104,7 +91,6 @@ export const ProfileSetupAgeScreen: React.FC<ProfileSetupAgeScreenProps> = ({
       ]).start();
     }, 600);
 
-    // Button animation
     setTimeout(() => {
       RNAnimated.parallel([
         RNAnimated.timing(buttonOpacity, {
@@ -286,6 +272,13 @@ export const ProfileSetupAgeScreen: React.FC<ProfileSetupAgeScreenProps> = ({
         <View style={styles.fadeOverlayBottom} pointerEvents="none" />
       </RNAnimated.View>
 
+      {/* Age Display */}
+      <View style={styles.ageDisplayContainer}>
+        <Text style={styles.ageDisplayText}>
+          Age: <Text style={styles.ageDisplayValue}>{currentAge} years</Text>
+        </Text>
+      </View>
+
       {/* Spacer */}
       <View style={{ flex: 1 }} />
 
@@ -333,6 +326,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   backButtonContainer: {
+    marginTop: 20,
     marginBottom: 30,
   },
   backButton: {
@@ -353,14 +347,14 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontSize: 22,
     color: '#2563EB',
-    fontWeight: '700',
+    fontFamily: FONTS.POPPINS_BOLD,
   },
   headerSection: {
     marginBottom: 30,
   },
   title: {
     fontSize: 30,
-    fontWeight: '800',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     marginBottom: 12,
     lineHeight: 46,
@@ -368,23 +362,23 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14,
-    fontWeight: '400',
+    fontFamily: FONTS.POPPINS_REGULAR,
     color: '#8B92A9',
     lineHeight: 20,
     letterSpacing: 0.3,
   },
   pickerContainer: {
-    marginVertical: 30,
-    borderRadius: 24,
+    marginVertical: 20,
+    borderRadius: 20,
     overflow: 'hidden',
   },
   pickerBox: {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 24,
+    borderRadius: 20,
     height: ITEM_HEIGHT * VISIBLE_ITEMS,
     flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderWidth: 2,
+    borderColor: 'rgba(37, 99, 235, 0.2)',
     overflow: 'hidden',
   },
   pickerColumn: {
@@ -407,14 +401,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   pickerItem: {
-    fontSize: 14,
-    fontWeight: '400',
+    fontSize: 16,
+    fontFamily: FONTS.POPPINS_REGULAR,
     color: 'rgba(255, 255, 255, 0.4)',
     textAlign: 'center',
   },
   pickerItemSelected: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 20,
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#2563EB',
   },
   pickerHighlight: {
@@ -423,11 +417,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: ITEM_HEIGHT,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderTopColor: 'rgba(37, 99, 235, 0.3)',
-    borderBottomColor: 'rgba(37, 99, 235, 0.3)',
-    backgroundColor: 'rgba(37, 99, 235, 0.08)',
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+    borderTopColor: 'rgba(37, 99, 235, 0.4)',
+    borderBottomColor: 'rgba(37, 99, 235, 0.4)',
+    backgroundColor: 'rgba(37, 99, 235, 0.1)',
     pointerEvents: 'none',
   },
   fadeOverlayTop: {
@@ -436,7 +430,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: ITEM_HEIGHT * 2,
-    backgroundColor: 'rgba(15, 20, 25, 0.9)',
+    backgroundColor: 'rgba(15, 20, 25, 0.95)',
     pointerEvents: 'none' as any,
   },
   fadeOverlayBottom: {
@@ -445,8 +439,27 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: ITEM_HEIGHT * 2,
-    backgroundColor: 'rgba(15, 20, 25, 0.9)',
+    backgroundColor: 'rgba(15, 20, 25, 0.95)',
     pointerEvents: 'none' as any,
+  },
+  ageDisplayContainer: {
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    borderRadius: 12,
+    padding: 14,
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.3)',
+    alignItems: 'center',
+  },
+  ageDisplayText: {
+    fontSize: 14,
+    fontFamily: FONTS.POPPINS_MEDIUM,
+    color: '#8B92A9',
+  },
+  ageDisplayValue: {
+    fontSize: 16,
+    fontFamily: FONTS.POPPINS_BOLD,
+    color: '#10B981',
   },
   warningContainer: {
     backgroundColor: 'rgba(239, 68, 68, 0.15)',
@@ -459,7 +472,7 @@ const styles = StyleSheet.create({
   },
   warningText: {
     fontSize: 13,
-    fontWeight: '600',
+    fontFamily: FONTS.POPPINS_SEMIBOLD,
     color: '#EF4444',
     textAlign: 'center',
     letterSpacing: 0.3,
@@ -487,7 +500,7 @@ const styles = StyleSheet.create({
   },
   getStartedText: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     letterSpacing: 0.4,
   },

@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { FONTS } from '../theme/fonts';
 
 interface ProfileSetupAllergyScreenProps {
   onBack?: () => void;
@@ -19,8 +20,8 @@ interface ProfileSetupAllergyScreenProps {
 const { width } = Dimensions.get('window');
 
 export const ProfileSetupAllergyScreen: React.FC<ProfileSetupAllergyScreenProps> = ({
-  onBack = () => {},
-  onGetStarted = () => {},
+  onBack = () => { },
+  onGetStarted = () => { },
 }) => {
   const [allergies, setAllergies] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -96,6 +97,37 @@ export const ProfileSetupAllergyScreen: React.FC<ProfileSetupAllergyScreenProps>
     if (allergies.trim()) {
       onGetStarted(allergies.trim());
     }
+  };
+
+  const handleAllergyClick = (allergyName: string) => {
+    const currentAllergies = allergies.trim();
+
+    // Check if this allergy is already in the list
+    const allergyList = currentAllergies
+      .split(',')
+      .map(a => a.trim())
+      .filter(a => a.length > 0);
+
+    if (allergyList.includes(allergyName)) {
+      // Remove the allergy if it's already selected
+      const updatedList = allergyList.filter(a => a !== allergyName);
+      setAllergies(updatedList.join(', '));
+    } else {
+      // Add the allergy
+      if (currentAllergies.length > 0) {
+        setAllergies(currentAllergies + ', ' + allergyName);
+      } else {
+        setAllergies(allergyName);
+      }
+    }
+  };
+
+  const isAllergySelected = (allergyName: string) => {
+    const allergyList = allergies
+      .split(',')
+      .map(a => a.trim())
+      .filter(a => a.length > 0);
+    return allergyList.includes(allergyName);
   };
 
   const isButtonDisabled = !allergies.trim();
@@ -176,6 +208,124 @@ export const ProfileSetupAllergyScreen: React.FC<ProfileSetupAllergyScreenProps>
           />
         </RNAnimated.View>
 
+        {/* Allergy Examples */}
+        <RNAnimated.View
+          style={[
+            styles.examplesContainer,
+            {
+              opacity: inputOpacity,
+            },
+          ]}
+        >
+          <Text style={styles.examplesTitle}>Common Examples:</Text>
+          <View style={styles.examplesGrid}>
+            <TouchableOpacity
+              style={[
+                styles.exampleTag,
+                isAllergySelected('Peanuts') && styles.exampleTagSelected,
+              ]}
+              onPress={() => handleAllergyClick('Peanuts')}
+              activeOpacity={0.7}
+            >
+              <Text style={[
+                styles.exampleText,
+                isAllergySelected('Peanuts') && styles.exampleTextSelected,
+              ]}>🥜 Peanuts</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.exampleTag,
+                isAllergySelected('Dairy') && styles.exampleTagSelected,
+              ]}
+              onPress={() => handleAllergyClick('Dairy')}
+              activeOpacity={0.7}
+            >
+              <Text style={[
+                styles.exampleText,
+                isAllergySelected('Dairy') && styles.exampleTextSelected,
+              ]}>🥛 Dairy</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.exampleTag,
+                isAllergySelected('Shellfish') && styles.exampleTagSelected,
+              ]}
+              onPress={() => handleAllergyClick('Shellfish')}
+              activeOpacity={0.7}
+            >
+              <Text style={[
+                styles.exampleText,
+                isAllergySelected('Shellfish') && styles.exampleTextSelected,
+              ]}>🦐 Shellfish</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.exampleTag,
+                isAllergySelected('Eggs') && styles.exampleTagSelected,
+              ]}
+              onPress={() => handleAllergyClick('Eggs')}
+              activeOpacity={0.7}
+            >
+              <Text style={[
+                styles.exampleText,
+                isAllergySelected('Eggs') && styles.exampleTextSelected,
+              ]}>🥚 Eggs</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.exampleTag,
+                isAllergySelected('Gluten') && styles.exampleTagSelected,
+              ]}
+              onPress={() => handleAllergyClick('Gluten')}
+              activeOpacity={0.7}
+            >
+              <Text style={[
+                styles.exampleText,
+                isAllergySelected('Gluten') && styles.exampleTextSelected,
+              ]}>🌾 Gluten</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.exampleTag,
+                isAllergySelected('Tree Nuts') && styles.exampleTagSelected,
+              ]}
+              onPress={() => handleAllergyClick('Tree Nuts')}
+              activeOpacity={0.7}
+            >
+              <Text style={[
+                styles.exampleText,
+                isAllergySelected('Tree Nuts') && styles.exampleTextSelected,
+              ]}>🌰 Tree Nuts</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.exampleTag,
+                isAllergySelected('Fish') && styles.exampleTagSelected,
+              ]}
+              onPress={() => handleAllergyClick('Fish')}
+              activeOpacity={0.7}
+            >
+              <Text style={[
+                styles.exampleText,
+                isAllergySelected('Fish') && styles.exampleTextSelected,
+              ]}>🐟 Fish</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.exampleTag,
+                isAllergySelected('Latex') && styles.exampleTagSelected,
+              ]}
+              onPress={() => handleAllergyClick('Latex')}
+              activeOpacity={0.7}
+            >
+              <Text style={[
+                styles.exampleText,
+                isAllergySelected('Latex') && styles.exampleTextSelected,
+              ]}>🍓 Latex</Text>
+            </TouchableOpacity>
+          </View>
+        </RNAnimated.View>
+
         {/* Spacer */}
         <View style={{ flex: 1 }} />
 
@@ -218,6 +368,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   backButtonContainer: {
+    marginTop: 20,
     marginBottom: 30,
   },
   backButton: {
@@ -238,14 +389,14 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontSize: 22,
     color: '#2563EB',
-    fontWeight: '700',
+    fontFamily: FONTS.POPPINS_BOLD,
   },
   headerSection: {
     marginBottom: 40,
   },
   title: {
     fontSize: 30,
-    fontWeight: '800',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     marginBottom: 12,
     lineHeight: 46,
@@ -253,31 +404,35 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14,
-    fontWeight: '400',
+    fontFamily: FONTS.POPPINS_REGULAR,
     color: '#8B92A9',
     lineHeight: 20,
     letterSpacing: 0.3,
   },
   inputWrapper: {
     marginBottom: 40,
-    borderRadius: 24,
-    overflow: 'hidden',
   },
   input: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 16,
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    fontSize: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    borderRadius: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    fontSize: 15,
     color: '#FFFFFF',
-    borderWidth: 1.5,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    minHeight: 180,
-    fontFamily: Platform.OS === 'ios' ? 'System' : 'Roboto',
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    minHeight: 160,
+    fontFamily: FONTS.POPPINS_REGULAR,
+    lineHeight: 24,
   },
   inputFocused: {
-    borderColor: 'rgba(37, 99, 235, 0.6)',
-    backgroundColor: 'rgba(37, 99, 235, 0.08)',
+    borderColor: '#2563EB',
+    backgroundColor: 'rgba(37, 99, 235, 0.12)',
+    shadowColor: '#2563EB',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   buttonWrapper: {
     marginTop: 20,
@@ -301,8 +456,45 @@ const styles = StyleSheet.create({
   },
   getStartedText: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: FONTS.POPPINS_BOLD,
     color: '#FFFFFF',
     letterSpacing: 0.4,
   },
-  });
+  examplesContainer: {
+    marginBottom: 20,
+  },
+  examplesTitle: {
+    fontSize: 13,
+    fontFamily: FONTS.POPPINS_SEMIBOLD,
+    color: '#8B92A9',
+    marginBottom: 12,
+    letterSpacing: 0.3,
+  },
+  examplesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  exampleTag: {
+    backgroundColor: 'rgba(37, 99, 235, 0.15)',
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(37, 99, 235, 0.3)',
+  },
+  exampleTagSelected: {
+    backgroundColor: '#2563EB',
+    borderColor: '#2563EB',
+  },
+  exampleText: {
+    fontSize: 13,
+    fontFamily: FONTS.POPPINS_MEDIUM,
+    color: '#2563EB',
+    letterSpacing: 0.2,
+  },
+  exampleTextSelected: {
+    color: '#FFFFFF',
+    fontFamily: FONTS.POPPINS_BOLD,
+  },
+});
